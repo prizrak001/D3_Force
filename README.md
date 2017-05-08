@@ -5,8 +5,8 @@
 
 ---
 
-* [https://www.youtube.com/watch?v=JpIoB-9D9Hk](https://www.youtube.com/watch?v=JpIoB-9D9Hk)
+* [https://www.youtube.com/watch?v=FA721g0INGQ](https://www.youtube.com/watch?v=FA721g0INGQ)
 
 ---
 
-![Picture](http://i.imgur.com/Nt2oruE.png)
+![Picture](http://i.imgur.com/X2qfJUO.png)

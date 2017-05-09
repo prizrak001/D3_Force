@@ -1,12 +1,7 @@
-|          |                                               |
-|----------|-----------------------------------------------|
-| Issue    | http://technozone:9081/browse/NOTE-287        |
-| Origin   | https://bl.ocks.org/mbostock/3750558          |
+http://technozone:9081/browse/NOTE-287
 
 ---
 
-* [https://www.youtube.com/watch?v=FA721g0INGQ](https://www.youtube.com/watch?v=FA721g0INGQ)
+Watch on YouTube
+    * [![Picture](http://i.imgur.com/X2qfJUO.png)](https://www.youtube.com/watch?v=FA721g0INGQ)
 
----
-
-![Picture](http://i.imgur.com/X2qfJUO.png)

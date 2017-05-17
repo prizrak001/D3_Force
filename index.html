@@ -3,14 +3,11 @@
 <style>
 .link {
     stroke: #000;
-    stroke-width: 1.5px;
+    stroke-width: 20px;
 }
 
 .node {
     cursor: move;
-    <!-- fill: #ccc; -->
-    <!-- stroke: #000; -->
-    <!-- stroke-width: 1.5px; -->
 }
 
 .zone {
@@ -24,17 +21,16 @@
         const width = 1024;
         const height = 768;
 
-        const simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().distance(40.0))
-            .force("charge", d3.forceManyBody().strength(-200.0).distanceMin(30.0).distanceMax(180.0))
-            .force("center", d3.forceCenter(width / 2.0, height / 2.0));
+        const simulation = d3.forceSimulation();
+
+        const zoom = d3.zoom()
+            .scaleExtent([0.01, 80])
+            .on("zoom", zoomed);
 
         const svg = d3.select("body").append("svg")
             .attr("width", width)
             .attr("height", height)
-            .call(d3.zoom()
-                .scaleExtent([0.25, 80])
-                .on("zoom", zoomed));
+            .call(zoom);
 
         svg.append("rect")
             .attr("width", width)
@@ -42,40 +38,78 @@
             .attr("class", "zone");
 
         const container = svg.append("g");
+        
+        zoom.scaleTo(svg, 0.05);
 
-        var link = container.selectAll(".link");
-        var node = container.selectAll(".node");
-
-        const imageWidth = 40.0;
-        const imageHeight = 40.0;
+        let link = container.selectAll(".link");
+        let node = container.selectAll(".node");
 
         d3.json("graph.json", function (error, graph) {
             if (error) throw error;
+            
+            const imageLoadPromiseArray = [];
+            
+            for (let graphNode of graph.nodes) {
+                imageLoadPromiseArray.push(new Promise(function(resolve, reject) {
+                    const image = new Image();
+                    image.onload = function() {
+                        const imageRadius = Math.sqrt(Math.pow(image.width, 2) + Math.pow(image.height, 2)) / 2.0;
+                        graphNode.imageWidth = image.width;
+                        graphNode.imageHeight = image.height;
+                        graphNode.imageRadius = imageRadius;
+                        resolve("Done");
+                    };
+                    image.src = graphNode.imageUrl;
+                }));
+            }
+            
+            Promise.all(imageLoadPromiseArray).then(function(value) { 
+                link = link.data(graph.links).enter()
+                    .append("line")
+                    .attr("class", "link");
 
-            link = link.data(graph.links)
-                .enter().append("line")
-                .attr("class", "link");
+                node = node.data(graph.nodes).enter()
+                    .append("svg:image")
+                    .attr("class", "node")
+                    .attr("x", function(d) {
+                        return -(d.imageWidth / 2.0);
+                    })
+                    .attr("y", function(d) {
+                        return -(d.imageHeight / 2.0);
+                    })
+                    .attr("width", function(d) {
+                        return d.imageWidth;
+                    })
+                    .attr("height", function(d) {
+                        return d.imageHeight;
+                    })
+                    .attr("xlink:href", function(d) {
+                        return d.imageUrl;
+                    })
+                    .call(d3.drag()
+                        .on("start", dragstarted)
+                        .on("drag", dragged)
+                        .on("end", dragended)
+                    );
 
-            node = node.data(graph.nodes)
-                .enter()
-                .append("svg:image")
-                .attr("class", "node")
-                .attr("x", -(imageWidth / 2.0))
-                .attr("y", -(imageHeight / 2.0))
-                .attr("width", imageWidth)
-                .attr("height", imageHeight)
-                .attr("xlink:href", "img0001.png")
-                .call(d3.drag()
-                    .on("start", dragstarted)
-                    .on("drag", dragged)
-                    .on("end", dragended));
-
-            simulation
-                .nodes(graph.nodes)
-                .on("tick", ticked);
-
-            simulation
-                .force("link").links(graph.links);
+                simulation
+                    .nodes(graph.nodes)
+                    .force(
+                        "link", 
+                        d3.forceLink()
+                            .links(graph.links)
+                            .strength(1.5)
+                            .distance(function(d) {
+                                return 5.0 + d.source.imageRadius + d.target.imageRadius;
+                            })
+                    )
+                    .force("charge", d3.forceManyBody().strength(-200000.0))
+                    .force('centerX', d3.forceX(width / 2.0))
+					.force('centerY', d3.forceY(height / 2.0))
+                    .on("tick", ticked);
+            }, function(reason) {
+                alert("Unable to load image");
+            });
         });
 
         function zoomed() {
@@ -84,7 +118,7 @@
 
         function dragstarted(d) {
             if (!d3.event.active) {
-                simulation.alphaTarget(0.95).restart();
+                simulation.alphaTarget(1.0).restart();
             }
             d.fx = d.x;
             d.fy = d.y;
@@ -104,12 +138,12 @@
         }
 
         function ticked() {
-            link.attr("x1", function (d) { return d.source.x; })
-                .attr("y1", function (d) { return d.source.y; })
-                .attr("x2", function (d) { return d.target.x; })
-                .attr("y2", function (d) { return d.target.y; });
+            link.attr("x1", function(d) { return d.source.x; })
+                .attr("y1", function(d) { return d.source.y; })
+                .attr("x2", function(d) { return d.target.x; })
+                .attr("y2", function(d) { return d.target.y; });
 
-            node.attr("transform", function (d) { return sprintf("translate(%f, %f)", d.x, d.y); });
+            node.attr("transform", function(d) { return sprintf("translate(%f, %f)", d.x, d.y); });
         }
 
     </script>

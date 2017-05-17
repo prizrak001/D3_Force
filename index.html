@@ -25,6 +25,7 @@
 
         const zoom = d3.zoom()
             .scaleExtent([0.01, 80])
+            .translateExtent([[-55000, -55000], [56024, 55768]])
             .on("zoom", zoomed);
 
         const svg = d3.select("body").append("svg")

@@ -22,7 +22,7 @@ router.get('/svg-by-text/:text', function(req, res) {
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
     
-    const svgInfo = {width: 600, height: 600, fontFamily: 'Arial', fontSize: 60, text: text};
+    const svgInfo = {width: 600, height: 600, fontFamily: 'Arial', fontSize: 60, text: text, textPadding: 20};
     
     res.render('svg.ejs', svgInfo);    
 });

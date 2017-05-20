@@ -29,7 +29,9 @@
     {"imageUrl": "img0002.png"},    
     
     {"imageUrl": "img0001.png"},
-    {"imageUrl": "img0002.png"}
+    {"imageUrl": "img0002.png"},
+    {"imageUrl": "svg-by-text/No%20description%2C%20website%2C%20or%20topics%20provided"},
+    {"imageUrl": "svg-by-text/%7B%22text%22%3A%20%22Hello%2C%20World!%22%7D"}
   ],
   "links": [
     {"source":  0, "target":  1},
@@ -70,6 +72,8 @@
     {"source": 24, "target": 25},
     {"source": 25, "target": 23},
     
-    {"source": 26, "target": 27}
+    {"source": 26, "target": 27},
+    {"source": 27, "target": 28},
+    {"source": 28, "target": 29}
   ]
 }

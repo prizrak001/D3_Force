@@ -1,6 +1,6 @@
 ### Issue
 
-http://technozone:9081/browse/NOTE-287?focusedCommentId=23900&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-23900
+[Link](http://technozone:9081/browse/NOTE-287?focusedCommentId=23900&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-23900)
 
 ### Dependencies
 
